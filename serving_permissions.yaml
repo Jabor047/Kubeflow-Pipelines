@@ -1,0 +1,26 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: inferenceservice-edit
+  selfLink: /apis/rbac.authorization.k8s.io/v1/clusterroles/inference-service
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - inferenceservice
+  verbs:
+  - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: inferenceservice-edit
+  namespace: gkkarobia
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: inferenceservice-edit
+subjects:
+- kind: ServiceAccount
+  name: default-editor
+  namespace: gkkarobia
