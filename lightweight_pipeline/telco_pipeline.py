@@ -7,7 +7,7 @@ def download_data() -> str:
     from requests import get
     import io
 
-    url = "https://storage.googleapis.com/datatonic-mlops/data/telco.csv"
+    url = "https://storage.googleapis.com/<GCS Bucket>/data/telco.csv"
     s = get(url).content
     df = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
@@ -92,7 +92,7 @@ def find_eng_and_exp_score(exp_path: str, eng_path: str) -> str:
     from google.cloud import storage
     from requests import get
 
-    url = "https://storage.googleapis.com/datatonic-mlops/kubeflow-tutorials-340813-d338387fc0f4.json"
+    url = "https://storage.googleapis.com/<GCS Bucket>/kubeflow-tutorials-340813-d338387fc0f4.json"
     s = get(url).content
 
     serv_acc_json = json.loads(s)
@@ -100,7 +100,7 @@ def find_eng_and_exp_score(exp_path: str, eng_path: str) -> str:
         json.dump(serv_acc_json, f)
 
     storage_client = storage.Client.from_service_account_json("/data/service_account.json")
-    bucket = storage_client.bucket("datatonic-mlops")
+    bucket = storage_client.bucket("<GCS Bucket>")
     eng_blob = bucket.blob("models/sklearn/engagement/001/model.pkl")
     exp_blob = bucket.blob("models/sklearn/experience/001/model.pkl")
 
@@ -167,7 +167,7 @@ def find_satisfaction(input_path: str):
     from google.cloud import storage
     from requests import get
 
-    url = "https://storage.googleapis.com/datatonic-mlops/kubeflow-tutorials-340813-d338387fc0f4.json"
+    url = "https://storage.googleapis.com/<GCS Bucket>/kubeflow-tutorials-340813-d338387fc0f4.json"
     s = get(url).content
 
     serv_acc_json = json.loads(s)
@@ -175,7 +175,7 @@ def find_satisfaction(input_path: str):
         json.dump(serv_acc_json, f)
 
     storage_client = storage.Client.from_service_account_json("/data/service_account.json")
-    bucket = storage_client.bucket("datatonic-mlops")
+    bucket = storage_client.bucket("<GCS Bucket>")
     blob = bucket.blob("models/sklearn/satisfaction/001/model.pkl")
 
     df = pd.read_csv(input_path)
@@ -221,7 +221,7 @@ def telco_pipeline():
                                                       "onents/kubeflow/kfserving/component.yaml")
     kf_serve_op = kf_serve(
         action="apply",
-        model_uri="gs://datatonic-mlops/models/sklearn/satisfaction",
+        model_uri="gs://<GCS Bucket>/models/sklearn/satisfaction",
         model_name="satisfactionkmeans",
         namespace="gkkarobia",
         framework="sklearn",
