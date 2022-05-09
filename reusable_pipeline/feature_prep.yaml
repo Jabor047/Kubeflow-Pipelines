@@ -1,0 +1,14 @@
+name: telco satisfaction feature preparation
+description: Creates experience and engagement datasets from thr overall dataset
+
+outputs:
+  - {name: experience_data, type: Dataset, description: 'serialized experience data'}
+  - {name: engagement_data, type: Dataset, description: 'serialized engagement data'}
+
+implementation:
+  container:
+    image: jabor047/kubeflow-pipeline-reusable-components-feature-prep:v.0.1
+    command: [
+      python,
+      /feature_prep/feature_preparation.py,
+    ]
