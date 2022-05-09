@@ -20,5 +20,11 @@ implementation:
       --engagement_data,
       {inputPath: Engangement_Data},
       --experience_data,
-      {inputPath: Experience_Data}
+      {inputPath: Experience_Data},
+      --engagement_model,
+      {outputPath: Engagement Model},
+      --experience_model,
+      {outputPath: Experience Model},
+      --satisfaction_model,
+      {outputPath: Satisfaction Model}
     ]
