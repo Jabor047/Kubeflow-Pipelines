@@ -2,8 +2,8 @@ name: telco satisfaction feature preparation
 description: Creates experience and engagement datasets from thr overall dataset
 
 outputs:
-  - {name: experience_data, type: Dataset, description: 'serialized experience data'}
-  - {name: engagement_data, type: Dataset, description: 'serialized engagement data'}
+  - {name: experience_data, type: Data, description: 'serialized experience data'}
+  - {name: engagement_data, type: Data, description: 'serialized engagement data'}
 
 implementation:
   container:
@@ -11,4 +11,8 @@ implementation:
     command: [
       python,
       /feature_prep/feature_preparation.py,
+      --experience_data,
+      {outputPath: experience_data},
+      --engagement_data,
+      {outputPath: engagement_data}
     ]
