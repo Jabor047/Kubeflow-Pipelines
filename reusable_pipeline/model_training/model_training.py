@@ -6,7 +6,7 @@ from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
 
 
-def find_eng_and_exp_score(experience_data, engagement_data) -> pd.DataFrame:
+def find_eng_and_exp_score(experience_data, engagement_data, engagement_model, experience_model):
 
     df_experience = joblib.load(experience_data)
     df_engagement = joblib.load(engagement_data)
@@ -26,8 +26,8 @@ def find_eng_and_exp_score(experience_data, engagement_data) -> pd.DataFrame:
     engagement_kmeans = KMeans(n_clusters=3, random_state=42).fit(df_engagement_norm)
     experience_kmeans = KMeans(n_clusters=3, random_state=42).fit(df_experience_norm)
 
-    joblib.dump(engagement_kmeans, "engagement_kmeans.pkl")
-    joblib.dump(experience_kmeans, "experience_kmeans.pkl")
+    joblib.dump(engagement_kmeans, engagement_model)
+    joblib.dump(experience_kmeans, experience_model)
 
     least_eng_cluster = engagement_kmeans.cluster_centers_[0]
     least_exp_cluster = experience_kmeans.cluster_centers_[0]
@@ -57,11 +57,11 @@ def find_eng_and_exp_score(experience_data, engagement_data) -> pd.DataFrame:
 
     return df
 
-def find_satisfaction(df):
+def find_satisfaction(df, satisfaction_model):
 
     satisfaction_kmeans = KMeans(n_clusters=2, random_state=42).fit(df[["Engagement Score", "Experience Score"]])
     df["Satisfaction"] = np.transpose(satisfaction_kmeans.labels_)
-    joblib.dump(satisfaction_kmeans, "satisfaction_kmeans.pkl")
+    joblib.dump(satisfaction_kmeans, satisfaction_model)
 
     print(df[["MSISDN/Number", "Satisfaction"]])
 
@@ -69,7 +69,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--experience_data", type=str, help="Path to experience data")
     parser.add_argument("--engagement_data", type=str, help="Path to engagement data")
+    parser.add_argument("--engagement_model", type=str, help="Path to engagement model")
+    parser.add_argument("--experience_model", type=str, help="Path to experience model")
+    parser.add_argument("--satisfaction_model", type=str, help="Path to satisfaction model")
     args = parser.parse_args()
 
-    df = find_eng_and_exp_score(args.experience_data, args.engagement_data)
-    find_satisfaction(df)
+    df = find_eng_and_exp_score(args.experience_data, args.engagement_data, args.engagement_model,
+                                args.experience_model)
+    find_satisfaction(df, args.satisfaction_model)
