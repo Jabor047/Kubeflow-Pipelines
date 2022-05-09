@@ -187,7 +187,7 @@ def find_satisfaction(input_path: str):
     print(df[["MSISDN/Number", "Satisfaction"]])
 
 @dsl.pipeline(name="telco_pipeline",
-              description="Telco pipeline for the presentation")
+              description="lightweight component Telco pipeline for the presentation")
 def telco_pipeline():
 
     data_op = dsl.VolumeOp(name="create-pvc",
@@ -231,7 +231,7 @@ def telco_pipeline():
 
 kfp.compiler.Compiler().compile(telco_pipeline, "telco_pipeline_gcloud.zip")
 
-client = kfp.Client()
-experiment = client.create_experiment("telco")
-run = client.run_pipeline(experiment_id=experiment.id, job_name="telco_pipeline",
-                          pipeline_package_path="telco_pipeline.zip")
+# client = kfp.Client()
+# experiment = client.create_experiment("telco")
+# run = client.run_pipeline(experiment_id=experiment.id, job_name="telco_pipeline",
+#                           pipeline_package_path="telco_pipeline.zip")
