@@ -1,12 +1,13 @@
 import io
 import joblib
+import argparse
 import pandas as pd
 from requests import get
 
 
 def download_data() -> pd.DataFrame:
 
-    url = "https://storage.googleapis.com/<GCS Bucket>/data/telco.csv"
+    url = "https://storage.googleapis.com/datatonic-mlops/data/telco.csv"
     s = get(url).content
     df = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
@@ -27,7 +28,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-def feature_prep(df: pd.DataFrame):
+def feature_prep(df: pd.DataFrame, exp_data_path: str, eng_data_path: str):
 
     # this sums up all the values in a dataframe col
     def sum_agg(dataframe: pd.DataFrame, col: str) -> pd.DataFrame:
@@ -59,12 +60,18 @@ def feature_prep(df: pd.DataFrame):
     # select the required columns for experience analysis
     df_experience = df[["MSISDN/Number", "Avg RTT", "Avg Bearer TP (kbps)", "TCP Retrans. Vol (Bytes)"]]
 
-    joblib.dump(df_experience, 'experience_data')
-    joblib.dump(df_engagement, 'engagement_data')
+    joblib.dump(df_experience, exp_data_path)
+    joblib.dump(df_engagement, eng_data_path)
 
 if __name__ == "__main__":
     print("Feature preparation started")
     df = download_data()
     df = clean_data(df)
-    feature_prep(df)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--experience_data", type=str, help="Path to experience data")
+    parser.add_argument("--engagement_data", type=str, help="Path to engagement data")
+    args = parser.parse_args()
+
+    feature_prep(df, args.experience_data, args.engagement_data)
     print("Feature preparation complete")
