@@ -1,4 +1,5 @@
 import io
+import os
 import joblib
 import argparse
 import pandas as pd
@@ -7,7 +8,7 @@ from requests import get
 
 def download_data() -> pd.DataFrame:
 
-    url = "https://storage.googleapis.com/< GCS BUCKET >/data/telco.csv"
+    url = "https://storage.googleapis.com/<GCS BUCKET>/data/telco.csv"
     s = get(url).content
     df = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
@@ -29,6 +30,9 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def feature_prep(df: pd.DataFrame, exp_data_path: str, eng_data_path: str):
+
+    os.makedirs(os.path.dirname(exp_data_path), exist_ok=True)
+    os.makedirs(os.path.dirname(eng_data_path), exist_ok=True)
 
     # this sums up all the values in a dataframe col
     def sum_agg(dataframe: pd.DataFrame, col: str) -> pd.DataFrame:
