@@ -11,8 +11,8 @@ def telco_reusable_pipeline():
     model_training_comp = kfp.components.load_component_from_url(
         "https://raw.githubusercontent.com/Jabor047/Kubeflow-Pipelines/main/reusable_pipeline/model_training.yaml"
     )
-    model_training_op = model_training_comp(feature_prep_op.outputs["engagement_data"],
-                                            feature_prep_op.outputs["experience_data"]).after(feature_prep_op)
+    model_training_op = model_training_comp(feature_prep_op().outputs["engagement_data"],
+                                            feature_prep_op().outputs["experience_data"]).after(feature_prep_op())
 
 kfp.compiler.Compiler().compile(telco_reusable_pipeline, 'telco_pipeline_reusable.zip')
 
