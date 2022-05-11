@@ -7,7 +7,7 @@ outputs:
 
 implementation:
   container:
-    image: jabor047/kubeflow-pipeline-reusable-components-feature-prep:v.0.1
+    image: jabor047/kubeflow-pipeline-reusable-components-feature-prep:latest
     command: [
       python,
       /feature_prep/feature_preparation.py,
