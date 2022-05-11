@@ -7,7 +7,7 @@ inputs:
 
 implementation:
   container:
-    image: jabor047/kubeflow-pipeline-reusable-components-model-training:v.0.1
+    image: jabor047/kubeflow-pipeline-reusable-components-model-training:latest
     command: [
       python,
       /model_training/model_training.py,
