@@ -1,12 +1,27 @@
+import json
 import joblib
 import argparse
 import pandas as pd
 import numpy as np
+from google.cloud import storage
 from sklearn.preprocessing import normalize
 from sklearn.cluster import KMeans
+from requests import get
 
 
-def find_eng_and_exp_score(experience_data, engagement_data, engagement_model, experience_model):
+def find_eng_and_exp_score(experience_data, engagement_data):
+
+    url = "https://storage.googleapis.com/<GCS Bucket>/kubeflow-tutorials-340813-d338387fc0f4.json"
+    s = get(url).content
+
+    serv_acc_json = json.loads(s)
+    with open("/data/service_account.json", 'w') as f:
+        json.dump(serv_acc_json, f)
+
+    storage_client = storage.Client.from_service_account_json("/data/service_account.json")
+    bucket = storage_client.bucket("<GCS Bucket>")
+    eng_blob = bucket.blob("models/sklearn/engagement/001/model.pkl")
+    exp_blob = bucket.blob("models/sklearn/experience/001/model.pkl")
 
     df_experience = joblib.load(experience_data)
     df_engagement = joblib.load(engagement_data)
@@ -26,8 +41,10 @@ def find_eng_and_exp_score(experience_data, engagement_data, engagement_model, e
     engagement_kmeans = KMeans(n_clusters=3, random_state=42).fit(df_engagement_norm)
     experience_kmeans = KMeans(n_clusters=3, random_state=42).fit(df_experience_norm)
 
-    joblib.dump(engagement_kmeans, engagement_model)
-    joblib.dump(experience_kmeans, experience_model)
+    joblib.dump(engagement_kmeans, "/data/engagement_kmeans.pkl")
+    joblib.dump(experience_kmeans, "/data/experience_kmeans.pkl")
+    eng_blob.upload_from_filename("/data/engagement_kmeans.pkl")
+    exp_blob.upload_from_filename("/data/experience_kmeans.pkl")
 
     least_eng_cluster = engagement_kmeans.cluster_centers_[0]
     least_exp_cluster = experience_kmeans.cluster_centers_[0]
@@ -59,9 +76,21 @@ def find_eng_and_exp_score(experience_data, engagement_data, engagement_model, e
 
 def find_satisfaction(df, satisfaction_model):
 
+    url = "https://storage.googleapis.com/<GCS Bucket>/kubeflow-tutorials-340813-d338387fc0f4.json"
+    s = get(url).content
+
+    serv_acc_json = json.loads(s)
+    with open("/data/service_account.json", 'w') as f:
+        json.dump(serv_acc_json, f)
+
+    storage_client = storage.Client.from_service_account_json("/data/service_account.json")
+    bucket = storage_client.bucket("<GCS Bucket>")
+    blob = bucket.blob("models/sklearn/satisfaction/001/model.pkl")
+
     satisfaction_kmeans = KMeans(n_clusters=2, random_state=42).fit(df[["Engagement Score", "Experience Score"]])
     df["Satisfaction"] = np.transpose(satisfaction_kmeans.labels_)
-    joblib.dump(satisfaction_kmeans, satisfaction_model)
+    joblib.dump(satisfaction_kmeans, "/data/satisfaction_kmeans.pkl")
+    blob.upload_from_filename("/data/satisfaction_kmeans.pkl")
 
     print(df[["MSISDN/Number", "Satisfaction"]])
 
