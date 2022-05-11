@@ -10,7 +10,7 @@ implementation:
     image: jabor047/kubeflow-pipeline-reusable-components-feature-prep:latest
     command: [
       python,
-      /feature_prep/feature_preparation.py,
+      /feature_prep/feature_prep.py,
       --experience_data,
       {outputPath: experience_data},
       --engagement_data,
