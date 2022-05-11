@@ -11,7 +11,7 @@ from requests import get
 
 def find_eng_and_exp_score(experience_data, engagement_data):
 
-    url = "https://storage.googleapis.com/<GCS Bucket>/kubeflow-tutorials-340813-d338387fc0f4.json"
+    url = "https://storage.googleapis.com/< GCS BUCKET >/kubeflow-tutorials-340813-d338387fc0f4.json"
     s = get(url).content
 
     serv_acc_json = json.loads(s)
@@ -19,7 +19,7 @@ def find_eng_and_exp_score(experience_data, engagement_data):
         json.dump(serv_acc_json, f)
 
     storage_client = storage.Client.from_service_account_json("/data/service_account.json")
-    bucket = storage_client.bucket("<GCS Bucket>")
+    bucket = storage_client.bucket("< GCS BUCKET >")
     eng_blob = bucket.blob("models/sklearn/engagement/001/model.pkl")
     exp_blob = bucket.blob("models/sklearn/experience/001/model.pkl")
 
@@ -76,7 +76,7 @@ def find_eng_and_exp_score(experience_data, engagement_data):
 
 def find_satisfaction(df, satisfaction_model):
 
-    url = "https://storage.googleapis.com/<GCS Bucket>/kubeflow-tutorials-340813-d338387fc0f4.json"
+    url = "https://storage.googleapis.com/< GCS BUCKET >/kubeflow-tutorials-340813-d338387fc0f4.json"
     s = get(url).content
 
     serv_acc_json = json.loads(s)
@@ -84,7 +84,7 @@ def find_satisfaction(df, satisfaction_model):
         json.dump(serv_acc_json, f)
 
     storage_client = storage.Client.from_service_account_json("/data/service_account.json")
-    bucket = storage_client.bucket("<GCS Bucket>")
+    bucket = storage_client.bucket("< GCS BUCKET >")
     blob = bucket.blob("models/sklearn/satisfaction/001/model.pkl")
 
     satisfaction_kmeans = KMeans(n_clusters=2, random_state=42).fit(df[["Engagement Score", "Experience Score"]])
