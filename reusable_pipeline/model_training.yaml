@@ -2,8 +2,8 @@ name: model training
 description: trains the satisfaction model
 
 inputs:
-  - {name: Engangement_Data, type: Data, description: 'serialized experience data'}
-  - {name: Experience_Data, type: Data, description: 'serialized engagement data'}
+  - {name: Engangement_Data, type: String, description: 'serialized experience data'}
+  - {name: Experience_Data, type: String, description: 'serialized engagement data'}
 
 implementation:
   container:
