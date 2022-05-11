@@ -12,8 +12,7 @@ implementation:
       python,
       /model_training/model_training.py,
       --engagement_data,
-      {inputPath: Engangement_Data},
+      {inputValue: Engangement_Data},
       --experience_data,
-      {inputPath: Experience_Data},
-      --engagement_model
+      {inputValue: Experience_Data}
     ]
