@@ -7,7 +7,7 @@ from requests import get
 
 def download_data() -> pd.DataFrame:
 
-    url = "https://storage.googleapis.com/datatonic-mlops/data/telco.csv"
+    url = "https://storage.googleapis.com/< GCS BUCKET >/data/telco.csv"
     s = get(url).content
     df = pd.read_csv(io.StringIO(s.decode("utf-8")))
 
