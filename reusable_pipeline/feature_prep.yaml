@@ -12,7 +12,7 @@ implementation:
       python,
       /feature_prep/feature_prep.py,
       --experience_data,
-      {outputPath: experience_data},
+      {outputValue: experience_data},
       --engagement_data,
-      {outputPath: engagement_data}
+      {outputValue: engagement_data}
     ]
