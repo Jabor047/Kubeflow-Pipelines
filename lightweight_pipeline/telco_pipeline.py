@@ -229,9 +229,18 @@ def telco_pipeline():
     )
     kf_serve_op.after(step5)
 
-kfp.compiler.Compiler().compile(telco_pipeline, "telco_pipeline_gcloud.zip")
+kfp.compiler.Compiler().compile(telco_pipeline, "telco_pipeline.zip")
 
-# client = kfp.Client()
-# experiment = client.create_experiment("telco")
-# run = client.run_pipeline(experiment_id=experiment.id, job_name="telco_pipeline",
-#                           pipeline_package_path="telco_pipeline.zip")
+kubeflow_gateway_endpoint = "localhost:7777"
+authservice_session_cookie = "MTY1Mjg2MTY4MnxOd3dBTkZnM1dVdFVRMFEwTkVWR1dVWlZWbEpYVmxBMVNrUlpTRXhTUkZoV05ETkVTalpaUWtaU"
+"E5GaExXbFZKVlU0MlNWZE9XbEU9fCF_YdjoAAYppXzd0de2fRiN9xrLret1r5AhyO25J0XO"
+namespace = "gkkarobia"
+
+client = kfp.Client(f"http://{kubeflow_gateway_endpoint}/pipeline",
+                    cookies=f"authservice_session={authservice_session_cookie}")
+
+experiment = client.create_experiment("telco", namespace=namespace)
+print(client.list_experiments(namespace=namespace))
+
+run = client.run_pipeline(experiment_id=experiment.id, job_name="telco_pipeline",
+                          pipeline_package_path="telco_pipeline.zip")
