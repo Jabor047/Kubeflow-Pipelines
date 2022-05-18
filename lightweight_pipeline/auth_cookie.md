@@ -27,7 +27,7 @@ Look for the line with:
 > Copy the value represented by the "REQ_VALUE" placeholder and Assign it to a variable.
 REQ=REQ_VALUE
 
-> 3. curl -v "http://${SERVICE}:${PORT}dex/auth/local?req=${REQ}" -H 'Content-Type: application/x-www-form-urlencoded' --data 'login=admin%40kubeflow.org&password=12341234'
+> 3. curl -v "http://${SERVICE}:${PORT}/dex/auth/local?req=${REQ}" -H 'Content-Type: application/x-www-form-urlencoded' --data 'login=admin%40kubeflow.org&password=12341234'
 
 > Change the Login value and password value to match your credentials
 
