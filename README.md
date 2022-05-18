@@ -10,5 +10,4 @@ I then set up the project as an end to end pipeline on Kubeflow pipeline.
     - auth_cookie.md - Contains instruction on how to get the authservice_session_cookie.
     - telco_pipeline.py - contains the code necessary to create the pipeline.
     - telco_pipeline.zip - This is the pipeline packaged as a zip
-
-
+* serving_permissions.yaml - this contains the necessary permission to enable model serving using kfserve
